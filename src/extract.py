@@ -10,14 +10,14 @@ READINGS_DIR = RAW_DATA_DIR / "readings"
 STATE_FILE = RAW_DATA_DIR / "ingest_state.json"
 
 TARGET_SITES = [
-    "MY1",  # Marylebone Road 
-    "BL0",  # Bloomsbury 
-    "CT3",  # City of London - Sir John Cass School 
-    "WA7",  # Wandsworth - Putney High Street 
-    "WA8",  # Wandsworth - Town Hall 
-    "SK6",  # Southwark - A2 Old Kent Road 
-    "SK5",  # Southwark - Elephant and Castle 
-    "HG4",  # Haringey - Tottenham High Road 
+    "MY1",  # Westminster - Marylebone Road (Kerbside)
+    "KC1",  # Kensington & Chelsea - North Ken (Urban Background reference)
+    "HK6",  # Hackney - Old Street (Roadside / City edge)
+    "LB4",  # Lambeth - Brixton Road (Kerbside - notorious NO2 hotspot)
+    "WA7",  # Wandsworth - Putney High Street (Kerbside - rich PM10/PM25)
+    "SK5",  # Southwark - A2 Old Kent Road (Roadside)
+    "HG4",  # Haringey - Priory Park South (Urban Background near N17)
+    "TH2",  # Tower Hamlets - Mile End Road (Roadside - A11 corridor)
 ]
 
 
