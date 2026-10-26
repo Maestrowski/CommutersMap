@@ -18,6 +18,9 @@ TARGET_SITES = [
     "SK5",  # Southwark - A2 Old Kent Road (Roadside)
     "HG4",  # Haringey - Priory Park South (Urban Background near N17)
     "TH2",  # Tower Hamlets - Mile End Road (Roadside - A11 corridor)
+    "SK8", # Southwark - Elephant & Castle (Roadside)
+    "SK6", # Southwark - Walworth Road (Roadside)
+    "CD9" # Camden - Euston Road (Roadside)
 ]
 
 
