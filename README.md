@@ -47,10 +47,12 @@ Data gathered:
 
 ### Environment setup
 git clone https://github.com/Maestrowski/CommutersMap.git
+
 cd CommutersMap
 
 ### Virtual environment 
 python -m venv .venv
+
 .venv\Scripts\Activate.ps1
 
 pip install -r requirements.txt
