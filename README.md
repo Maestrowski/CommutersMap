@@ -74,8 +74,8 @@ Gather data and implement a feature that allows to calculate the cumulative poll
 
 Develop a time-series model that can forecast rush-hour pollution 24 hours in advance.
 
-Locate or scrape data that would be capable of filling in data from offline monitors.
+Fill in the data from offline stations by scraping borough council environmental data from their respective web pages which offers an alternative to gather the data beyond the London Air Quality Network API. 
 
 ## Where AI helped
 
-I used AI to research the key pollutants that commuters might need to look out for. Also used AI to pick out the monitor stations and how many should be used for most optimal results without overwhelming rate limits but showing a vast coverage of London. 
+I used AI to research the key pollutants that commuters might need to look out for. Implemented AI for debugging and styling of the Streamlit interface. 
