@@ -27,17 +27,17 @@ def main():
     start_time = time.time()
     
     print("=" * 60)
-    print(" 🚶 London Commuter Clean Air Map | End-to-End Pipeline")
+    print(" London Commuter Pollutant Warning Map ")
     print("=" * 60)
 
     try:
-        # Phase 1: Ingestion
+        # Ingestion
         logger.info("[Phase 1/2] Syncing monitoring sites & incremental readings...")
         fetch_site_metadata()
         new_records = fetch_incremental_readings(days_backfill=args.days)
         logger.info(f"Ingestion complete: {new_records} new raw reading payload(s) stored.")
 
-        # Phase 2: Transformation & Modeling
+        # Transformation & Modeling
         logger.info("[Phase 2/2] Running DuckDB dimensional transformations & marts...")
         run_transformations()
         logger.info("Transformation complete: Star schema tables & marts updated.")

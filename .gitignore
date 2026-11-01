@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+
+# Environment / Credentials
+.env
+
+# Editor & OS
+.DS_Store
+.vscode/
+.idea/
+
+# Database files (optional: commit initial raw JSON, exclude transient db locks if needed)
+*.duckdb.wal
