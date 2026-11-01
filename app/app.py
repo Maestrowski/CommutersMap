@@ -91,28 +91,31 @@ active_sites_df = con.execute("""
 
 active_sites = active_sites_df["site_code"].tolist()
 
-nearest = None
-if lat and active_sites:
+# Always load active sites dataframe so map and queries have access to it
+if active_sites:
     sites_df = con.execute(f"""
         SELECT site_code, site_name, site_type, borough_name, latitude, longitude 
         FROM dim_sites 
         WHERE latitude IS NOT NULL 
           AND site_code IN ({','.join([f"'{s}'" for s in active_sites])})
     """).df()
-
-    if not sites_df.empty:
-        sites_df["dist_km"] = sites_df.apply(lambda r: haversine(lat, lon, r["latitude"], r["longitude"]), axis=1)
-        nearest = sites_df.sort_values("dist_km").iloc[0]
-
-        with col_m1:
-            st.metric(label="Nearest Active Monitor", value=nearest["site_code"])
-            st.caption(f"{nearest['site_name']} ({nearest['dist_km']:.2f} km)")
-
-        with col_m2:
-            st.metric(label="Site Type", value=nearest["site_type"])
-            st.caption(f"Borough: {nearest['borough_name']}")
 else:
-    st.error("Invalid postcode or coordinates unavailable.")
+    sites_df = pd.DataFrame(columns=["site_code", "site_name", "site_type", "borough_name", "latitude", "longitude"])
+
+nearest = None
+if lat and not sites_df.empty:
+    sites_df["dist_km"] = sites_df.apply(lambda r: haversine(lat, lon, r["latitude"], r["longitude"]), axis=1)
+    nearest = sites_df.sort_values("dist_km").iloc[0]
+
+    with col_m1:
+        st.metric(label="Nearest Active Monitor", value=nearest["site_code"])
+        st.caption(f"{nearest['site_name']} ({nearest['dist_km']:.2f} km)")
+
+    with col_m2:
+        st.metric(label="Site Type", value=nearest["site_type"])
+        st.caption(f"Borough: {nearest['borough_name']}")
+else:
+    st.warning("⚠️ Please enter a valid London postcode (e.g. EC4M 9BR or SW9 9SL) to see nearest station exposure.")
 
 # Local Postcode Pollution Cards 
 
@@ -170,22 +173,46 @@ if nearest is not None:
 
 st.markdown("---")
 
-# Hourly Diurnal Profile: NO2, PM25, and PM10
+# Hourly Diurnal Profile: NO2, PM25, and PM10 (Local-First with Safe Fallback)
 st.subheader("⏱️ 24-Hour Diurnal Pattern (NO₂, PM₂.₅, PM₁₀)")
-st.caption("Average hourly concentrations across London commuting corridors, exposing morning and evening rush-hour spikes.")
 
-hourly_multi = con.execute("""
-    SELECT 
-        hour_of_day,
-        species_code,
-        ROUND(AVG(measurement_value), 2) AS concentration
-    FROM fct_air_readings
-    WHERE is_valid_reading = TRUE
-      AND species_code IN ('NO2', 'PM25', 'PM10')
-      AND hour_of_day BETWEEN 0 AND 23
-    GROUP BY hour_of_day, species_code
-    ORDER BY hour_of_day, species_code
-""").df()
+hourly_multi = pd.DataFrame()
+
+if nearest is not None:
+    hourly_multi = con.execute(f"""
+        SELECT 
+            hour_of_day,
+            species_code,
+            ROUND(AVG(measurement_value), 2) AS concentration
+        FROM fct_air_readings
+        WHERE is_valid_reading = TRUE
+          AND site_code = '{nearest['site_code']}'
+          AND species_code IN ('NO2', 'PM25', 'PM10')
+          AND hour_of_day BETWEEN 0 AND 23
+        GROUP BY hour_of_day, species_code
+        ORDER BY hour_of_day, species_code
+    """).df()
+    
+    if not hourly_multi.empty:
+        st.caption(f"Average hourly concentrations for nearest monitor: **{nearest['site_name']} ({nearest['site_code']})**")
+
+if hourly_multi.empty:
+    hourly_multi = con.execute("""
+        SELECT 
+            hour_of_day,
+            species_code,
+            ROUND(AVG(measurement_value), 2) AS concentration
+        FROM fct_air_readings
+        WHERE is_valid_reading = TRUE
+          AND species_code IN ('NO2', 'PM25', 'PM10')
+          AND hour_of_day BETWEEN 0 AND 23
+        GROUP BY hour_of_day, species_code
+        ORDER BY hour_of_day, species_code
+    """).df()
+    if nearest is not None:
+        st.caption(f"ℹ️ Nearest monitor ({nearest['site_code']}) has no hourly telemetry. Showing **London-wide baseline** instead.")
+    else:
+        st.caption("ℹ️ Showing **London-wide baseline** average across all monitoring stations.")
 
 if not hourly_multi.empty:
     pivot_hourly = hourly_multi.pivot(index="hour_of_day", columns="species_code", values="concentration").reindex(range(24))
@@ -193,37 +220,56 @@ if not hourly_multi.empty:
 else:
     st.info("No hourly data available.")
 
-# Daily Average Trend (Side-by-Side: NO2, PM2.5, PM10)
-st.subheader("📅 Daily Pollutant Exposure (NO₂, PM₂.₅, PM₁₀)")
-st.caption("Side-by-side comparison of combustion exhaust (NO₂ - Blue), fine particulates (PM₂.₅ - Green), and dust/wear (PM₁₀ - Orange).")
 
-# Query NO2, PM25, and PM10 aggregated by formatted date string
-daily_df = con.execute("""
-    SELECT 
-        STRFTIME(CAST(reading_datetime AS DATE), '%Y-%m-%d') AS reading_date,
-        species_code,
-        ROUND(AVG(measurement_value), 2) AS avg_concentration
-    FROM fct_air_readings
-    WHERE is_valid_reading = TRUE
-      AND species_code IN ('NO2', 'PM25', 'PM10')
-    GROUP BY CAST(reading_datetime AS DATE), species_code
-    ORDER BY reading_date
-""").df()
+# Daily Average Trend (Side-by-Side: NO2, PM2.5, PM10) (Local-First with Safe Fallback)
+st.subheader("📅 Daily Pollutant Exposure (NO₂, PM₂.₅, PM₁₀)")
+
+daily_df = pd.DataFrame()
+
+if nearest is not None:
+    daily_df = con.execute(f"""
+        SELECT 
+            STRFTIME(CAST(reading_datetime AS DATE), '%Y-%m-%d') AS reading_date,
+            species_code,
+            ROUND(AVG(measurement_value), 2) AS avg_concentration
+        FROM fct_air_readings
+        WHERE is_valid_reading = TRUE
+          AND site_code = '{nearest['site_code']}'
+          AND species_code IN ('NO2', 'PM25', 'PM10')
+        GROUP BY CAST(reading_datetime AS DATE), species_code
+        ORDER BY reading_date
+    """).df()
+    
+    if not daily_df.empty:
+        st.caption(f"Side-by-side daily trends for **{nearest['site_name']} ({nearest['site_code']})**.")
+
+if daily_df.empty:
+    daily_df = con.execute("""
+        SELECT 
+            STRFTIME(CAST(reading_datetime AS DATE), '%Y-%m-%d') AS reading_date,
+            species_code,
+            ROUND(AVG(measurement_value), 2) AS avg_concentration
+        FROM fct_air_readings
+        WHERE is_valid_reading = TRUE
+          AND species_code IN ('NO2', 'PM25', 'PM10')
+        GROUP BY CAST(reading_datetime AS DATE), species_code
+        ORDER BY reading_date
+    """).df()
+    if nearest is not None:
+        st.caption(f"ℹ️ Showing London-wide daily baseline due to missing local telemetry for {nearest['site_code']}.")
+    else:
+        st.caption("ℹ️ Showing **London-wide daily baseline** across all monitoring stations.")
 
 if not daily_df.empty:
-    # Pivot so each species gets its own column
     pivot_daily = daily_df.pivot(
         index="reading_date", 
         columns="species_code", 
         values="avg_concentration"
     )
 
-    # Reorder columns to guarantee exact color mapping:
-    # NO2 -> Blue, PM25 -> Green, PM10 -> Orange
     cols_order = [c for c in ["NO2", "PM25", "PM10"] if c in pivot_daily.columns]
     pivot_daily = pivot_daily[cols_order]
 
-    # Map colors strictly based on available columns
     color_map = {
         "NO2": "#2563eb",   
         "PM25": "#16a34a",  
@@ -231,7 +277,6 @@ if not daily_df.empty:
     }
     chart_colors = [color_map[col] for col in cols_order]
 
-    # stack=False places them side-by-side; formatted date eliminates the 12 PM ticks
     st.bar_chart(
         pivot_daily,
         stack=False,
@@ -303,44 +348,45 @@ else:
     m = folium.Map(location=[51.5074, -0.0940], zoom_start=11, tiles="OpenStreetMap")
 
     # Render corridor buffer circles and station pins
-    for _, row in sites_df.iterrows():
-        s_code = row["site_code"]
-        val = snapshot_values.get(s_code)
-        band_label, bg_color, _ = get_daqi_status(map_species, val)
-        
-        val_text = f"{val:.1f} µg/m³" if val is not None else "Offline / No Data"
+    if not sites_df.empty:
+        for _, row in sites_df.iterrows():
+            s_code = row["site_code"]
+            val = snapshot_values.get(s_code)
+            band_label, bg_color, _ = get_daqi_status(map_species, val)
+            
+            val_text = f"{val:.1f} µg/m³" if val is not None else "Offline / No Data"
 
-        # 1.8 km corridor buffer zone
-        folium.Circle(
-            location=[row["latitude"], row["longitude"]],
-            radius=1800,
-            color=bg_color,
-            fill=True,
-            fill_color=bg_color,
-            fill_opacity=0.35,
-            weight=1.5,
-            tooltip=f"{row['site_name']} ({row['site_type']}): {val_text} [{band_label}]"
-        ).add_to(m)
+            # 1.8 km corridor buffer zone
+            folium.Circle(
+                location=[row["latitude"], row["longitude"]],
+                radius=1800,
+                color=bg_color,
+                fill=True,
+                fill_color=bg_color,
+                fill_opacity=0.35,
+                weight=1.5,
+                tooltip=f"{row['site_name']} ({row['site_type']}): {val_text} [{band_label}]"
+            ).add_to(m)
 
-        # Marker center pin
-        folium.CircleMarker(
-            location=[row["latitude"], row["longitude"]],
-            radius=6,
-            color="#111827",
-            weight=1,
-            fill=True,
-            fill_color=bg_color,
-            fill_opacity=1.0,
-            popup=(
-                f"<b>{row['site_name']}</b> ({row['site_code']})<br>"
-                f"Type: {row['site_type']}<br>"
-                f"Time: {active_timestamp_str}<br>"
-                f"{map_species}: <b>{val_text}</b><br>"
-                f"DEFRA Band: {band_label}"
-            )
-        ).add_to(m)
+            # Marker center pin
+            folium.CircleMarker(
+                location=[row["latitude"], row["longitude"]],
+                radius=6,
+                color="#111827",
+                weight=1,
+                fill=True,
+                fill_color=bg_color,
+                fill_opacity=1.0,
+                popup=(
+                    f"<b>{row['site_name']}</b> ({row['site_code']})<br>"
+                    f"Type: {row['site_type']}<br>"
+                    f"Time: {active_timestamp_str}<br>"
+                    f"{map_species}: <b>{val_text}</b><br>"
+                    f"DEFRA Band: {band_label}"
+                )
+            ).add_to(m)
 
-    # Highlight postcode target location
+    # Highlight postcode target location (if valid coordinates were resolved)
     if lat and lon:
         folium.Marker(
             location=[lat, lon],
