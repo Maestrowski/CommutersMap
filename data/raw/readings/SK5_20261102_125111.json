@@ -1,0 +1,242 @@
+[
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 00:00:00",
+    "@Value": "39"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 01:00:00",
+    "@Value": "37.1"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 02:00:00",
+    "@Value": "28.9"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 03:00:00",
+    "@Value": "28.9"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 04:00:00",
+    "@Value": "25.1"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 05:00:00",
+    "@Value": "26.4"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 06:00:00",
+    "@Value": "27"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 07:00:00",
+    "@Value": "24.7"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 08:00:00",
+    "@Value": "22.4"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 09:00:00",
+    "@Value": "20.3"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 10:00:00",
+    "@Value": "25.8"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 11:00:00",
+    "@Value": "23.5"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 12:00:00",
+    "@Value": "18.6"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 13:00:00",
+    "@Value": "27"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 14:00:00",
+    "@Value": "26.4"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 15:00:00",
+    "@Value": "23.7"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 16:00:00",
+    "@Value": "22"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 17:00:00",
+    "@Value": "22.9"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 18:00:00",
+    "@Value": "17.2"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 19:00:00",
+    "@Value": "19.5"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 20:00:00",
+    "@Value": "16.1"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 21:00:00",
+    "@Value": "20.5"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 22:00:00",
+    "@Value": "21.6"
+  },
+  {
+    "@SpeciesCode": "NO2",
+    "@MeasurementDateGMT": "2026-11-01 23:00:00",
+    "@Value": "24.3"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 00:00:00",
+    "@Value": "43"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 01:00:00",
+    "@Value": "44"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 02:00:00",
+    "@Value": "42"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 03:00:00",
+    "@Value": "40"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 04:00:00",
+    "@Value": "34"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 05:00:00",
+    "@Value": "43"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 06:00:00",
+    "@Value": "43"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 07:00:00",
+    "@Value": "33"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 08:00:00",
+    "@Value": "34"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 09:00:00",
+    "@Value": "84"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 10:00:00",
+    "@Value": "76"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 11:00:00",
+    "@Value": "27"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 12:00:00",
+    "@Value": "47"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 13:00:00",
+    "@Value": "18"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 14:00:00",
+    "@Value": "16"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 15:00:00",
+    "@Value": "17"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 16:00:00",
+    "@Value": "24"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 17:00:00",
+    "@Value": "22"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 18:00:00",
+    "@Value": "25"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 19:00:00",
+    "@Value": "31"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 20:00:00",
+    "@Value": "36"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 21:00:00",
+    "@Value": "32"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 22:00:00",
+    "@Value": "31"
+  },
+  {
+    "@SpeciesCode": "PM10",
+    "@MeasurementDateGMT": "2026-11-01 23:00:00",
+    "@Value": "37"
+  }
+]
